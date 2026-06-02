@@ -270,6 +270,7 @@ h1 { font-size: 20px; font-weight: 600; margin-bottom: 3px; }
   padding: 0 2px;
   text-align: center;
   line-height: 1;
+  pointer-events: none;
 }
 
 .fill-r { background: #EEEDFE; color: #3C3489; }
@@ -557,7 +558,6 @@ var FILL = {
 var cur = 'research';
 var state = {};
 var customLabels = {};
-var isPainting = false;
 
 var frag = document.createDocumentFragment();
 
@@ -698,63 +698,14 @@ function paintSlot(slot) {
   sendHeight();
 }
 
-function slotFromPoint(x, y) {
-  var el = document.elementFromPoint(x, y);
-
-  if (!el) return null;
-
-  if (el.hasAttribute('data-d')) return el;
-
-  if (el.parentNode && el.parentNode.hasAttribute && el.parentNode.hasAttribute('data-d')) {
-    return el.parentNode;
-  }
-
-  return null;
-}
-
 var calRows = document.getElementById('calRows');
 
-calRows.addEventListener('mousedown', function(e) {
-  var s = slotFromPoint(e.clientX, e.clientY);
+calRows.addEventListener('click', function(e) {
+  var slot = e.target.closest('.slot');
 
-  if (s) {
-    isPainting = true;
-    paintSlot(s);
-    e.preventDefault();
-  }
-});
+  if (!slot) return;
 
-calRows.addEventListener('mousemove', function(e) {
-  if (!isPainting) return;
-  paintSlot(slotFromPoint(e.clientX, e.clientY));
-});
-
-document.addEventListener('mouseup', function() {
-  isPainting = false;
-});
-
-calRows.addEventListener('touchstart', function(e) {
-  var t = e.touches[0];
-  var s = slotFromPoint(t.clientX, t.clientY);
-
-  if (s) {
-    isPainting = true;
-    paintSlot(s);
-    e.preventDefault();
-  }
-}, { passive: false });
-
-calRows.addEventListener('touchmove', function(e) {
-  if (!isPainting) return;
-
-  e.preventDefault();
-
-  var t = e.touches[0];
-  paintSlot(slotFromPoint(t.clientX, t.clientY));
-}, { passive: false });
-
-calRows.addEventListener('touchend', function() {
-  isPainting = false;
+  paintSlot(slot);
 });
 
 function updateSum() {
