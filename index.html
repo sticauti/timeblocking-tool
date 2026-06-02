@@ -433,7 +433,7 @@ footer {
   <input class="other-name-input" type="text" id="otherLabelInput" placeholder="Type custom block name here">
 </div>
 
-<p class="hint">Step 2 — tap any slot to fill it in. For “Other,” type the label above first, then tap the calendar.</p>
+<p class="hint">Step 2 — tap any slot to fill it in. Tap a filled slot again to clear it.</p>
 
 <div class="toprow">
   <div class="weekwrap">
@@ -645,6 +645,14 @@ function escapeHTML(text) {
     .replace(/'/g, "&#039;");
 }
 
+function clearSlot(slot, key) {
+  delete state[key];
+  delete customLabels[key];
+  slot.innerHTML = '';
+  updateSum();
+  sendHeight();
+}
+
 function paintSlot(slot) {
   if (!slot || !slot.hasAttribute('data-d')) return;
 
@@ -652,12 +660,13 @@ function paintSlot(slot) {
   var t = slot.getAttribute('data-t');
   var key = d + '_' + t;
 
+  if (state[key]) {
+    clearSlot(slot, key);
+    return;
+  }
+
   if (cur === 'erase') {
-    delete state[key];
-    delete customLabels[key];
-    slot.innerHTML = '';
-    updateSum();
-    sendHeight();
+    clearSlot(slot, key);
     return;
   }
 
