@@ -1,37 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Create With Amber — Weekly Planner</title>
-
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-html {
-  overflow-x: hidden;
-}
+html { overflow-x: hidden; }
 
 body {
   font-family: "DM Sans", sans-serif;
   background: #F7F5F2;
   color: #1C1A18;
   padding: 16px 12px 60px;
-  overflow-x: hidden;
   -webkit-text-size-adjust: 100%;
+  overflow-x: hidden;
 }
 
-.page {
-  max-width: 960px;
-  margin: 0 auto;
-}
+.page { max-width: 960px; margin: 0 auto; }
 
 .eyebrow {
   font-size: 11px;
@@ -42,11 +31,7 @@ body {
   margin-bottom: 4px;
 }
 
-h1 {
-  font-size: 20px;
-  font-weight: 600;
-  margin-bottom: 3px;
-}
+h1 { font-size: 20px; font-weight: 600; margin-bottom: 3px; }
 
 .subtitle {
   font-size: 13px;
@@ -67,7 +52,7 @@ h1 {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 .tbtn {
@@ -81,30 +66,70 @@ h1 {
   font-family: "DM Sans", sans-serif;
   cursor: pointer;
   min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
 }
 
-.tbtn.active-research { background:#EEEDFE; color:#3C3489; border-color:#9B97E0; }
-.tbtn.active-film { background:#FEF3DC; color:#7A4A08; border-color:#E8B94A; }
-.tbtn.active-edit { background:#E2F5EE; color:#085041; border-color:#5DCAA5; }
-.tbtn.active-admin { background:#FAECE7; color:#712B13; border-color:#E8926A; }
-.tbtn.active-personal { background:#F0EDE8; color:#4A4440; border-color:#A8A49E; }
-.tbtn.active-live { background:#FBEAF0; color:#72243E; border-color:#ED93B1; }
-.tbtn.active-other { background:#E8F4FB; color:#0C447C; border-color:#85B7EB; }
-.tbtn.active-erase { background:#FFF0F0; color:#A32D2D; border-color:#F09595; }
+.tbtn.active-research { background: #EEEDFE; color: #3C3489; border-color: #9B97E0; }
+.tbtn.active-film { background: #FEF3DC; color: #7A4A08; border-color: #E8B94A; }
+.tbtn.active-edit { background: #E2F5EE; color: #085041; border-color: #5DCAA5; }
+.tbtn.active-admin { background: #FAECE7; color: #712B13; border-color: #E8926A; }
+.tbtn.active-personal { background: #F0EDE8; color: #4A4440; border-color: #A8A49E; }
+.tbtn.active-live { background: #FBEAF0; color: #72243E; border-color: #ED93B1; }
+.tbtn.active-other { background: #E8F4FB; color: #0C447C; border-color: #85B7EB; }
+.tbtn.active-erase { background: #FFF0F0; color: #A32D2D; border-color: #F09595; }
+
+.other-label-row {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  background: #E8F4FB;
+  border: 1px solid #85B7EB;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.other-label-row.active { display: flex; }
+
+.other-label-row label {
+  font-size: 12px;
+  color: #0C447C;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.other-name-input {
+  font-size: 16px;
+  border: 1px solid #85B7EB;
+  background: #fff;
+  border-radius: 8px;
+  padding: 8px 10px;
+  color: #1C1A18;
+  width: 100%;
+  font-family: "DM Sans", sans-serif;
+}
+
+.other-name-input:focus {
+  outline: none;
+  border-color: #0C447C;
+}
 
 .hint {
   font-size: 12px;
   color: #B8B4AE;
-  margin-bottom: 14px;
+  margin: 6px 0 12px;
 }
 
 .toprow {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
   gap: 8px;
   flex-wrap: wrap;
-  margin-bottom: 10px;
 }
 
 .weekwrap {
@@ -116,6 +141,7 @@ h1 {
 .weekwrap label {
   font-size: 12px;
   color: #9C9890;
+  font-weight: 500;
 }
 
 .weekinput {
@@ -124,17 +150,22 @@ h1 {
   background: #fff;
   border-radius: 8px;
   padding: 6px 10px;
+  color: #1C1A18;
   width: 170px;
-  font-family: inherit;
+  font-family: "DM Sans", sans-serif;
 }
 
 .clearbtn {
   font-size: 13px;
+  color: #9C9890;
   background: #fff;
   border: 1px solid #D4CFC8;
   border-radius: 24px;
   padding: 7px 16px;
   cursor: pointer;
+  min-height: 36px;
+  font-family: "DM Sans", sans-serif;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .cal-outer {
@@ -142,31 +173,43 @@ h1 {
   border-radius: 10px;
   border: 1px solid #E0DCD6;
   background: #fff;
+  width: 100%;
 }
 
 .cal-inner {
+  min-width: 0;
   width: 100%;
+}
+
+.mobile-note {
+  background: #F0EDE8;
+  border-bottom: 1px solid #E0DCD6;
+  padding: 7px 12px;
+  font-size: 11px;
+  color: #8C8880;
+  text-align: center;
+  font-style: italic;
 }
 
 .day-header-row {
   display: grid;
   grid-template-columns: 48px repeat(7, minmax(0, 1fr));
-  background: #F5F2EF;
   border-bottom: 1px solid #E0DCD6;
+  background: #F5F2EF;
+  user-select: none;
 }
 
 .day-hdr {
   padding: 8px 2px;
   font-size: 11px;
   font-weight: 600;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   color: #9C9890;
   text-align: center;
 }
 
-.day-hdr:first-child {
-  border-right: 1px solid #E0DCD6;
-}
+.day-hdr:first-child { border-right: 1px solid #E0DCD6; }
 
 .time-row {
   display: grid;
@@ -174,32 +217,43 @@ h1 {
   border-bottom: 1px solid #E0DCD6;
 }
 
-.time-row:last-child {
-  border-bottom: none;
-}
+.time-row:last-child { border-bottom: none; }
+
+.time-row.stripe { background: #F5F2EF; }
+.time-row.stripe .slot { background: #F5F2EF; }
 
 .time-cell {
   font-size: 9px;
-  color: #8C8880;
-  padding-right: 4px;
+  color: #C0BCB6;
+  text-align: right;
+  padding: 0 5px 0 2px;
   display: flex;
   align-items: center;
   justify-content: flex-end;
   border-right: 1px solid #E0DCD6;
   background: #F5F2EF;
+  user-select: none;
   min-height: 30px;
+}
+
+.time-cell.hr {
+  color: #8C8880;
+  font-weight: 600;
+  font-size: 10px;
 }
 
 .slot {
   min-height: 30px;
   border-right: 1px solid #E0DCD6;
-  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
+  -webkit-tap-highlight-color: rgba(0,0,0,0.05);
+  position: relative;
 }
 
-.slot:last-child {
-  border-right: none;
-}
+.slot:last-child { border-right: none; }
 
 .slot-fill {
   position: absolute;
@@ -208,20 +262,23 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 7px;
+  font-size: 8px;
   font-weight: 700;
+  letter-spacing: 0.03em;
   text-transform: uppercase;
   overflow: hidden;
   padding: 0 2px;
+  text-align: center;
+  line-height: 1;
 }
 
-.fill-r { background:#EEEDFE; color:#3C3489; }
-.fill-f { background:#FEF3DC; color:#7A4A08; }
-.fill-e { background:#E2F5EE; color:#085041; }
-.fill-a { background:#FAECE7; color:#712B13; }
-.fill-p { background:#F0EDE8; color:#4A4440; }
-.fill-l { background:#FBEAF0; color:#72243E; }
-.fill-o { background:#E8F4FB; color:#0C447C; }
+.fill-r { background: #EEEDFE; color: #3C3489; }
+.fill-f { background: #FEF3DC; color: #7A4A08; }
+.fill-e { background: #E2F5EE; color: #085041; }
+.fill-a { background: #FAECE7; color: #712B13; }
+.fill-p { background: #F0EDE8; color: #4A4440; }
+.fill-l { background: #FBEAF0; color: #72243E; }
+.fill-o { background: #E8F4FB; color: #0C447C; }
 
 .sumrow {
   display: grid;
@@ -232,25 +289,36 @@ h1 {
 
 .scard {
   border-radius: 8px;
-  padding: 10px;
+  padding: 10px 10px 8px;
+  border: 1px solid transparent;
 }
 
-.scard.r { background:#EEEDFE; }
-.scard.f { background:#FEF3DC; }
-.scard.e { background:#E2F5EE; }
-.scard.a { background:#FAECE7; }
-.scard.p { background:#F0EDE8; }
-.scard.l { background:#FBEAF0; }
-.scard.o { background:#E8F4FB; }
+.scard.r { background: #EEEDFE; border-color: #C5C2F0; }
+.scard.f { background: #FEF3DC; border-color: #F5D78A; }
+.scard.e { background: #E2F5EE; border-color: #8ED9BE; }
+.scard.a { background: #FAECE7; border-color: #F0B49A; }
+.scard.p { background: #F0EDE8; border-color: #CEC9C2; }
+.scard.l { background: #FBEAF0; border-color: #ED93B1; }
+.scard.o { background: #E8F4FB; border-color: #85B7EB; }
 
 .sl {
   font-size: 9px;
+  font-weight: 600;
   text-transform: uppercase;
+  letter-spacing: 0.06em;
   margin-bottom: 3px;
 }
 
+.scard.r .sl,.scard.r .sh,.scard.r .sb { color: #3C3489; }
+.scard.f .sl,.scard.f .sh,.scard.f .sb { color: #7A4A08; }
+.scard.e .sl,.scard.e .sh,.scard.e .sb { color: #085041; }
+.scard.a .sl,.scard.a .sh,.scard.a .sb { color: #712B13; }
+.scard.p .sl,.scard.p .sh,.scard.p .sb { color: #4A4440; }
+.scard.l .sl,.scard.l .sh,.scard.l .sb { color: #72243E; }
+.scard.o .sl,.scard.o .sh,.scard.o .sb { color: #0C447C; }
+
 .sh {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 600;
 }
 
@@ -259,67 +327,93 @@ h1 {
   opacity: 0.6;
 }
 
+.download-wrap {
+  margin-top: 20px;
+  text-align: center;
+}
+
+#downloadBtn {
+  font-family: "DM Sans", sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  background: #1C1A18;
+  color: #fff;
+  border: none;
+  border-radius: 24px;
+  padding: 13px 32px;
+  cursor: pointer;
+  min-height: 48px;
+  -webkit-tap-highlight-color: transparent;
+  letter-spacing: -0.01em;
+}
+
+.download-help {
+  font-size: 11px;
+  color: #B8B4AE;
+  margin-top: 8px;
+}
+
 footer {
-  margin-top: 24px;
+  margin-top: 28px;
   font-size: 11px;
   color: #B8B4AE;
   text-align: center;
 }
 
 @media (max-width: 600px) {
-
-  body {
-    padding: 14px 6px 40px;
-  }
+  body { padding: 14px 6px 50px; }
+  .page { max-width: 100%; }
 
   .day-header-row,
   .time-row {
-    grid-template-columns: 30px repeat(7, minmax(0, 1fr));
+    grid-template-columns: 32px repeat(7, minmax(0, 1fr));
   }
 
   .day-hdr {
-    font-size: 7px;
-    padding: 5px 1px;
+    font-size: 8px;
+    padding: 6px 1px;
+    letter-spacing: 0;
   }
 
   .time-cell {
     font-size: 6px;
+    padding: 0 1px;
     min-height: 24px;
-    padding-right: 2px;
   }
 
-  .slot {
-    min-height: 24px;
-  }
+  .time-cell.hr { font-size: 7px; }
+
+  .slot { min-height: 24px; }
 
   .slot-fill {
-    font-size: 4px;
+    font-size: 4.5px;
+    letter-spacing: 0;
     padding: 0;
   }
 
-  .sumrow {
-    grid-template-columns: repeat(2, 1fr);
+  .sumrow { grid-template-columns: repeat(2, 1fr); }
+
+  .sh { font-size: 16px; }
+  .sb { font-size: 8px; }
+
+  .other-label-row {
+    flex-direction: column;
+    align-items: stretch;
   }
 
-  .sh {
-    font-size: 16px;
+  .other-label-row label {
+    white-space: normal;
   }
 }
-
 </style>
 </head>
 
 <body>
-
 <div class="page">
 
 <p class="eyebrow">Create With Amber</p>
-
 <h1>Weekly Affiliate Planner</h1>
-
-<p class="subtitle">
-TikTok Shop — time-block your week, protect your personal time.
-</p>
+<p class="subtitle">TikTok Shop — time-block your week, protect your personal time.</p>
 
 <p class="clabel">Step 1 — pick a block type</p>
 
@@ -334,26 +428,24 @@ TikTok Shop — time-block your week, protect your personal time.
   <button class="tbtn" data-t="erase">Erase</button>
 </div>
 
-<p class="hint">
-Tap a category, then tap the calendar to place it.
-</p>
+<div class="other-label-row" id="otherLabelRow">
+  <label for="otherLabelInput">Other label:</label>
+  <input class="other-name-input" type="text" id="otherLabelInput" placeholder="Type custom block name here">
+</div>
+
+<p class="hint">Step 2 — tap any slot to fill it in. For “Other,” type the label above first, then tap the calendar.</p>
 
 <div class="toprow">
-
   <div class="weekwrap">
     <label for="wk">Week of:</label>
     <input class="weekinput" type="text" id="wk" placeholder="e.g. June 2, 2026">
   </div>
-
-  <button class="clearbtn" id="clearBtn">
-    Clear all
-  </button>
-
+  <button class="clearbtn" id="clearBtn">Clear all</button>
 </div>
 
 <div class="cal-outer">
-
   <div class="cal-inner">
+    <div class="mobile-note">Tap a block type, then tap the calendar where you want it to go</div>
 
     <div class="day-header-row">
       <div class="day-hdr"></div>
@@ -367,52 +459,36 @@ Tap a category, then tap the calendar to place it.
     </div>
 
     <div id="calRows"></div>
-
   </div>
-
 </div>
 
 <div class="sumrow">
-
-  <div class="scard r">
-    <div class="sl">Research</div>
-    <div class="sh" id="h-r">0h</div>
-    <div class="sb" id="s-r">0 slots</div>
-  </div>
-
-  <div class="scard f">
-    <div class="sl">Filming</div>
-    <div class="sh" id="h-f">0h</div>
-    <div class="sb" id="s-f">0 slots</div>
-  </div>
-
-  <div class="scard e">
-    <div class="sl">Edit</div>
-    <div class="sh" id="h-e">0h</div>
-    <div class="sb" id="s-e">0 slots</div>
-  </div>
-
-  <div class="scard a">
-    <div class="sl">Admin</div>
-    <div class="sh" id="h-a">0h</div>
-    <div class="sb" id="s-a">0 slots</div>
-  </div>
-
+  <div class="scard r"><div class="sl">Research</div><div class="sh" id="h-r">0h</div><div class="sb" id="s-r">0 slots</div></div>
+  <div class="scard f"><div class="sl">Filming</div><div class="sh" id="h-f">0h</div><div class="sb" id="s-f">0 slots</div></div>
+  <div class="scard e"><div class="sl">Edit+post</div><div class="sh" id="h-e">0h</div><div class="sb" id="s-e">0 slots</div></div>
+  <div class="scard a"><div class="sl">Admin</div><div class="sh" id="h-a">0h</div><div class="sb" id="s-a">0 slots</div></div>
+  <div class="scard p"><div class="sl">Personal</div><div class="sh" id="h-p">0h</div><div class="sb" id="s-p">0 slots</div></div>
+  <div class="scard l"><div class="sl">Live</div><div class="sh" id="h-l">0h</div><div class="sb" id="s-l">0 slots</div></div>
+  <div class="scard o"><div class="sl" id="sum-o-label">Other</div><div class="sh" id="h-o">0h</div><div class="sb" id="s-o">0 slots</div></div>
 </div>
 
-<footer>
-Made for Create With Amber
-</footer>
-
+<div class="download-wrap">
+  <button id="downloadBtn">Download my schedule as image</button>
+  <p class="download-help">Saves your filled-in planner as a JPEG — works on phone and computer.</p>
 </div>
+
+<footer>Made for Create With Amber — your schedule, your rules.</footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <script>
-
 function sendHeight() {
-
   var height = Math.max(
     document.body.scrollHeight,
-    document.documentElement.scrollHeight
+    document.documentElement.scrollHeight,
+    document.body.offsetHeight,
+    document.documentElement.offsetHeight
   );
 
   parent.postMessage({
@@ -422,67 +498,83 @@ function sendHeight() {
 }
 
 var TIMES = [
-  ['6 AM'],['6:30'],
-  ['7 AM'],['7:30'],
-  ['8 AM'],['8:30'],
-  ['9 AM'],['9:30'],
-  ['10 AM'],['10:30'],
-  ['11 AM'],['11:30'],
-  ['12 PM'],['12:30'],
-  ['1 PM'],['1:30'],
-  ['2 PM'],['2:30'],
-  ['3 PM'],['3:30'],
-  ['4 PM'],['4:30'],
-  ['5 PM'],['5:30'],
-  ['6 PM'],['6:30'],
-  ['7 PM'],['7:30'],
-  ['8 PM'],['8:30'],
-  ['9 PM']
+  ['12 AM',1],['12:30',0],
+  ['1 AM',1],['1:30',0],
+  ['2 AM',1],['2:30',0],
+  ['3 AM',1],['3:30',0],
+  ['4 AM',1],['4:30',0],
+  ['5 AM',1],['5:30',0],
+  ['6 AM',1],['6:30',0],
+  ['7 AM',1],['7:30',0],
+  ['8 AM',1],['8:30',0],
+  ['9 AM',1],['9:30',0],
+  ['10 AM',1],['10:30',0],
+  ['11 AM',1],['11:30',0],
+  ['12 PM',1],['12:30',0],
+  ['1 PM',1],['1:30',0],
+  ['2 PM',1],['2:30',0],
+  ['3 PM',1],['3:30',0],
+  ['4 PM',1],['4:30',0],
+  ['5 PM',1],['5:30',0],
+  ['6 PM',1],['6:30',0],
+  ['7 PM',1],['7:30',0],
+  ['8 PM',1],['8:30',0],
+  ['9 PM',1],['9:30',0],
+  ['10 PM',1],['10:30',0],
+  ['11 PM',1],['11:30',0]
 ];
 
 var LABEL = {
-  research:'Research',
-  film:'Filming',
-  edit:'Edit',
-  admin:'Admin',
-  personal:'Personal',
-  live:'Live'
+  research: 'Research',
+  film: 'Filming',
+  edit: 'Edit+Post',
+  admin: 'Admin',
+  personal: 'Personal',
+  live: 'Live',
+  other: 'Other'
+};
+
+var CLS = {
+  research: 'r',
+  film: 'f',
+  edit: 'e',
+  admin: 'a',
+  personal: 'p',
+  live: 'l',
+  other: 'o'
 };
 
 var FILL = {
-  research:'fill-r',
-  film:'fill-f',
-  edit:'fill-e',
-  admin:'fill-a',
-  personal:'fill-p',
-  live:'fill-l',
-  other:'fill-o'
+  research: 'fill-r',
+  film: 'fill-f',
+  edit: 'fill-e',
+  admin: 'fill-a',
+  personal: 'fill-p',
+  live: 'fill-l',
+  other: 'fill-o'
 };
 
 var cur = 'research';
+var state = {};
+var customLabels = {};
+var isPainting = false;
 
 var frag = document.createDocumentFragment();
 
 for (var ti = 0; ti < TIMES.length; ti++) {
-
   var row = document.createElement('div');
-  row.className = 'time-row';
+  row.className = 'time-row' + (ti % 2 === 1 ? ' stripe' : '');
 
   var tc = document.createElement('div');
-  tc.className = 'time-cell';
+  tc.className = 'time-cell' + (TIMES[ti][1] ? ' hr' : '');
   tc.textContent = TIMES[ti][0];
-
   row.appendChild(tc);
 
   for (var di = 0; di < 7; di++) {
-
     var slot = document.createElement('div');
-
     slot.className = 'slot';
-
     slot.setAttribute('data-d', di);
     slot.setAttribute('data-t', ti);
-
     row.appendChild(slot);
   }
 
@@ -490,88 +582,256 @@ for (var ti = 0; ti < TIMES.length; ti++) {
 }
 
 document.getElementById('calRows').appendChild(frag);
+sendHeight();
 
 var btns = document.querySelectorAll('.tbtn');
+var otherLabelRow = document.getElementById('otherLabelRow');
+var otherLabelInput = document.getElementById('otherLabelInput');
 
 function activateBtn(btn) {
-
   cur = btn.getAttribute('data-t');
 
   for (var i = 0; i < btns.length; i++) {
-
-    btns[i].className =
-      'tbtn' + (btns[i] === btn ? ' active-' + cur : '');
-  }
-}
-
-for (var i = 0; i < btns.length; i++) {
-
-  (function(b) {
-
-    b.addEventListener('click', function() {
-
-      activateBtn(b);
-
-    });
-
-  })(btns[i]);
-}
-
-function paintSlot(slot) {
-
-  if (!slot) return;
-
-  if (cur === 'erase') {
-
-    slot.innerHTML = '';
-    return;
+    btns[i].className = 'tbtn' + (btns[i] === btn ? ' active-' + cur : '');
   }
 
   if (cur === 'other') {
-
-    var customLabel = prompt("What should this block say?");
-
-    if (!customLabel) return;
-
-    customLabel = customLabel.trim();
-
-    if (!customLabel) return;
-
-    slot.innerHTML =
-      '<div class="slot-fill fill-o">' +
-      customLabel +
-      '</div>';
-
-    sendHeight();
-    return;
+    otherLabelRow.classList.add('active');
+    setTimeout(function() {
+      otherLabelInput.focus();
+    }, 50);
+  } else {
+    otherLabelRow.classList.remove('active');
   }
-
-  slot.innerHTML =
-    '<div class="slot-fill ' +
-    FILL[cur] +
-    '">' +
-    LABEL[cur] +
-    '</div>';
 
   sendHeight();
 }
 
-document.querySelectorAll('.slot').forEach(function(slot) {
+for (var i = 0; i < btns.length; i++) {
+  (function(b) {
+    b.addEventListener('click', function(e) {
+      e.stopPropagation();
+      activateBtn(b);
+    });
+  })(btns[i]);
+}
 
-  slot.addEventListener('click', function() {
+otherLabelInput.addEventListener('input', function() {
+  sendHeight();
+});
 
-    paintSlot(this);
+document.getElementById('clearBtn').addEventListener('click', function() {
+  if (!confirm('Clear all blocks?')) return;
 
+  state = {};
+  customLabels = {};
+
+  var slots = document.querySelectorAll('.slot');
+
+  for (var i = 0; i < slots.length; i++) {
+    slots[i].innerHTML = '';
+  }
+
+  updateSum();
+  sendHeight();
+});
+
+function escapeHTML(text) {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function paintSlot(slot) {
+  if (!slot || !slot.hasAttribute('data-d')) return;
+
+  var d = slot.getAttribute('data-d');
+  var t = slot.getAttribute('data-t');
+  var key = d + '_' + t;
+
+  if (cur === 'erase') {
+    delete state[key];
+    delete customLabels[key];
+    slot.innerHTML = '';
+    updateSum();
+    sendHeight();
+    return;
+  }
+
+  if (cur === 'other') {
+    var customLabel = otherLabelInput.value.trim();
+
+    if (!customLabel) {
+      alert('Type your Other label first.');
+      otherLabelInput.focus();
+      return;
+    }
+
+    state[key] = cur;
+    customLabels[key] = customLabel;
+
+    slot.innerHTML = '<div class="slot-fill fill-o">' + escapeHTML(customLabel) + '</div>';
+
+    updateSum();
+    sendHeight();
+    return;
+  }
+
+  state[key] = cur;
+  delete customLabels[key];
+
+  slot.innerHTML = '<div class="slot-fill ' + FILL[cur] + '">' + LABEL[cur] + '</div>';
+
+  updateSum();
+  sendHeight();
+}
+
+function slotFromPoint(x, y) {
+  var el = document.elementFromPoint(x, y);
+
+  if (!el) return null;
+
+  if (el.hasAttribute('data-d')) return el;
+
+  if (el.parentNode && el.parentNode.hasAttribute && el.parentNode.hasAttribute('data-d')) {
+    return el.parentNode;
+  }
+
+  return null;
+}
+
+var calRows = document.getElementById('calRows');
+
+calRows.addEventListener('mousedown', function(e) {
+  var s = slotFromPoint(e.clientX, e.clientY);
+
+  if (s) {
+    isPainting = true;
+    paintSlot(s);
+    e.preventDefault();
+  }
+});
+
+calRows.addEventListener('mousemove', function(e) {
+  if (!isPainting) return;
+  paintSlot(slotFromPoint(e.clientX, e.clientY));
+});
+
+document.addEventListener('mouseup', function() {
+  isPainting = false;
+});
+
+calRows.addEventListener('touchstart', function(e) {
+  var t = e.touches[0];
+  var s = slotFromPoint(t.clientX, t.clientY);
+
+  if (s) {
+    isPainting = true;
+    paintSlot(s);
+    e.preventDefault();
+  }
+}, { passive: false });
+
+calRows.addEventListener('touchmove', function(e) {
+  if (!isPainting) return;
+
+  e.preventDefault();
+
+  var t = e.touches[0];
+  paintSlot(slotFromPoint(t.clientX, t.clientY));
+}, { passive: false });
+
+calRows.addEventListener('touchend', function() {
+  isPainting = false;
+});
+
+function updateSum() {
+  var cnt = { r:0, f:0, e:0, a:0, p:0, l:0, o:0 };
+  var keys = Object.keys(state);
+
+  for (var i = 0; i < keys.length; i++) {
+    var c = CLS[state[keys[i]]];
+
+    if (c !== undefined) {
+      cnt[c]++;
+    }
+  }
+
+  var types = ['r','f','e','a','p','l','o'];
+
+  for (var j = 0; j < types.length; j++) {
+    var n = cnt[types[j]];
+    var h = n * 0.5;
+
+    document.getElementById('h-' + types[j]).textContent =
+      (h === Math.floor(h) ? Math.floor(h) : h.toFixed(1)) + 'h';
+
+    document.getElementById('s-' + types[j]).textContent =
+      n + ' slot' + (n !== 1 ? 's' : '');
+  }
+
+  sendHeight();
+}
+
+document.getElementById('downloadBtn').addEventListener('click', function() {
+  var btn = this;
+
+  btn.textContent = 'Saving...';
+  btn.disabled = true;
+
+  var target = document.querySelector('.page');
+
+  html2canvas(target, {
+    scale: 2,
+    useCORS: true,
+    backgroundColor: '#F7F5F2',
+    logging: false
+  }).then(function(canvas) {
+    var wk = document.getElementById('wk').value.trim();
+
+    var filename =
+      'my-affiliate-schedule' +
+      (wk ? '-' + wk.replace(/[^a-z0-9]/gi, '-') : '') +
+      '.jpg';
+
+    var link = document.createElement('a');
+
+    link.download = filename;
+    link.href = canvas.toDataURL('image/jpeg', 0.92);
+    link.click();
+
+    btn.textContent = 'Download my schedule as image';
+    btn.disabled = false;
+
+    sendHeight();
+  }).catch(function() {
+    btn.textContent = 'Download my schedule as image';
+    btn.disabled = false;
+
+    alert('Could not save image. Try taking a screenshot instead.');
+
+    sendHeight();
   });
-
 });
 
 window.addEventListener("load", sendHeight);
 window.addEventListener("resize", sendHeight);
 
-setTimeout(sendHeight, 500);
+setTimeout(sendHeight, 250);
+setTimeout(sendHeight, 750);
+setTimeout(sendHeight, 1500);
+setTimeout(sendHeight, 3000);
 
+var observer = new MutationObserver(sendHeight);
+
+observer.observe(document.body, {
+  childList: true,
+  subtree: true,
+  attributes: true
+});
 </script>
-
 </body>
 </html>
