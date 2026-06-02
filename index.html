@@ -485,7 +485,10 @@ footer {
 
 <script>
 // ── Height reporting ──────────────────────────────────────────────────────────
-// Debounced so DOM mutations don't cause a resize → message → resize loop.
+// Debounced + height-diff guard to prevent resize feedback loops.
+// We do NOT listen to window "resize" events because when the parent page
+// grows to fit the iframe, that triggers a resize event inside the iframe,
+// which would report a new height, which grows the parent again — forever.
 var _heightTimer = null;
 var _lastSentHeight = 0;
 
@@ -498,12 +501,12 @@ function sendHeight() {
       document.body.offsetHeight,
       document.documentElement.offsetHeight
     );
-    // Only post if height actually changed — prevents infinite resize loops.
+    // Only post if height actually changed — breaks the feedback loop.
     if (height !== _lastSentHeight) {
       _lastSentHeight = height;
       parent.postMessage({ type: "resize-timeblocker", height: height + 40 }, "*");
     }
-  }, 100);
+  }, 200);
 }
 
 // ── Time slots ────────────────────────────────────────────────────────────────
@@ -694,7 +697,6 @@ function paintSlot(slot) {
   state[key] = cur;
   delete customLabels[key];
   slot.innerHTML = '<div class="slot-fill ' + FILL[cur] + '">' + LABEL[cur] + '</div>';
-
   updateSum();
   sendHeight();
 }
@@ -728,7 +730,6 @@ function updateSum() {
     document.getElementById('s-' + types[j]).textContent =
       n + ' slot' + (n !== 1 ? 's' : '');
   }
-  // Note: no sendHeight() call here — callers already call it
 }
 
 // ── Download ──────────────────────────────────────────────────────────────────
@@ -767,18 +768,17 @@ document.getElementById('downloadBtn').addEventListener('click', function() {
   });
 });
 
-// ── Initial height + resize ───────────────────────────────────────────────────
+// ── Initial height only — NO resize listener ──────────────────────────────────
+// Listening to window "resize" causes an infinite loop:
+// parent grows → iframe reflows → resize fires → new height posted →
+// parent grows more → repeat forever.
 window.addEventListener("load", sendHeight);
-window.addEventListener("resize", sendHeight);
 sendHeight();
 
-// MutationObserver — watches for layout changes but the debounce + height-diff
-// check above means it won't fire in a loop when Squarespace reacts to messages.
+// MutationObserver for content changes only.
+// attributes:false prevents re-triggering when the parent sets iframe height.
 var observer = new MutationObserver(sendHeight);
 observer.observe(document.body, { childList: true, subtree: true, attributes: false });
-//                                                                  ^^^^^^^^^^^^^^^^^^
-// attributes: false — avoids re-triggering on style changes caused by the
-// parent page adjusting the iframe height, which was the main loop culprit.
 </script>
 </body>
 </html>
