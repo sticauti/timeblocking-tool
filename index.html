@@ -123,6 +123,66 @@ h1 { font-size: 20px; font-weight: 600; margin-bottom: 3px; }
   margin: 6px 0 12px;
 }
 
+.inline-msg {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.inline-msg.active { display: flex; }
+
+.inline-msg.warn {
+  background: #FFF0F0;
+  border: 1px solid #F09595;
+  color: #A32D2D;
+}
+
+.inline-msg.info {
+  background: #E8F4FB;
+  border: 1px solid #85B7EB;
+  color: #0C447C;
+}
+
+.inline-msg-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.inline-msg button {
+  font-family: "DM Sans", sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 16px;
+  padding: 6px 14px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  min-height: 32px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.inline-msg.warn .confirm-yes {
+  background: #A32D2D;
+  color: #fff;
+}
+
+.inline-msg.warn .confirm-no {
+  background: #fff;
+  color: #A32D2D;
+  border-color: #F09595;
+}
+
+.inline-msg.info .confirm-ok {
+  background: #0C447C;
+  color: #fff;
+}
+
 .toprow {
   display: flex;
   align-items: center;
@@ -405,6 +465,15 @@ footer {
   .other-label-row label {
     white-space: normal;
   }
+
+  .inline-msg {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .inline-msg-actions {
+    justify-content: flex-end;
+  }
 }
 </style>
 </head>
@@ -432,6 +501,23 @@ footer {
 <div class="other-label-row" id="otherLabelRow">
   <label for="otherLabelInput">Other label:</label>
   <input class="other-name-input" type="text" id="otherLabelInput" placeholder="Type custom block name here">
+</div>
+
+<!-- Inline confirm message (replaces blocked window.confirm) -->
+<div class="inline-msg warn" id="clearConfirmMsg">
+  <span>Clear all blocks? This can't be undone.</span>
+  <div class="inline-msg-actions">
+    <button class="confirm-no" id="clearNoBtn">Cancel</button>
+    <button class="confirm-yes" id="clearYesBtn">Clear all</button>
+  </div>
+</div>
+
+<!-- Inline info message (replaces blocked window.alert) -->
+<div class="inline-msg info" id="otherAlertMsg">
+  <span>Type your Other label first.</span>
+  <div class="inline-msg-actions">
+    <button class="confirm-ok" id="otherAlertOkBtn">Got it</button>
+  </div>
 </div>
 
 <p class="hint">Step 2 — tap any slot to fill it in. Tap a filled slot again to clear it.</p>
@@ -630,10 +716,40 @@ for (var i = 0; i < btns.length; i++) {
 
 otherLabelInput.addEventListener('input', function() { sendHeight(); });
 
-// ── Clear all ─────────────────────────────────────────────────────────────────
-document.getElementById('clearBtn').addEventListener('click', function() {
-  if (!confirm('Clear all blocks?')) return;
+// ── Inline confirm/alert (replaces window.confirm / window.alert) ─────────────
+// Many iframe/webview contexts silently block native confirm() and alert()
+// dialogs, which is why "Clear all" and the "Other" label warning weren't
+// working. These inline banners do the same job without relying on the
+// browser's native dialog APIs.
+var clearConfirmMsg = document.getElementById('clearConfirmMsg');
+var clearYesBtn = document.getElementById('clearYesBtn');
+var clearNoBtn = document.getElementById('clearNoBtn');
+var otherAlertMsg = document.getElementById('otherAlertMsg');
+var otherAlertOkBtn = document.getElementById('otherAlertOkBtn');
 
+function showClearConfirm() {
+  otherAlertMsg.classList.remove('active');
+  clearConfirmMsg.classList.add('active');
+  sendHeight();
+}
+
+function hideClearConfirm() {
+  clearConfirmMsg.classList.remove('active');
+  sendHeight();
+}
+
+function showOtherAlert() {
+  clearConfirmMsg.classList.remove('active');
+  otherAlertMsg.classList.add('active');
+  sendHeight();
+}
+
+function hideOtherAlert() {
+  otherAlertMsg.classList.remove('active');
+  sendHeight();
+}
+
+clearYesBtn.addEventListener('click', function() {
   state = {};
   customLabels = {};
 
@@ -641,7 +757,15 @@ document.getElementById('clearBtn').addEventListener('click', function() {
   for (var i = 0; i < slots.length; i++) { slots[i].innerHTML = ''; }
 
   updateSum();
-  sendHeight();
+  hideClearConfirm();
+});
+
+clearNoBtn.addEventListener('click', hideClearConfirm);
+otherAlertOkBtn.addEventListener('click', hideOtherAlert);
+
+// ── Clear all ─────────────────────────────────────────────────────────────────
+document.getElementById('clearBtn').addEventListener('click', function() {
+  showClearConfirm();
 });
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -682,7 +806,7 @@ function paintSlot(slot) {
   if (cur === 'other') {
     var customLabel = otherLabelInput.value.trim();
     if (!customLabel) {
-      alert('Type your Other label first.');
+      showOtherAlert();
       otherLabelInput.focus();
       return;
     }
@@ -763,7 +887,8 @@ document.getElementById('downloadBtn').addEventListener('click', function() {
   }).catch(function() {
     btn.textContent = 'Download my schedule as image';
     btn.disabled = false;
-    alert('Could not save image. Try taking a screenshot instead.');
+    showOtherAlert(); // reuse the inline message box; native alert() may be blocked here too
+    document.querySelector('#otherAlertMsg span').textContent = 'Could not save image. Try taking a screenshot instead.';
     sendHeight();
   });
 });
